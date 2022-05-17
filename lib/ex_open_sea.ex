@@ -1,18 +1,5 @@
 defmodule ExOpenSea do
   @moduledoc """
-  Documentation for `ExOpenSea`.
+  OpenSea API Client for Elixir
   """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> ExOpenSea.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
 end

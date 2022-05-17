@@ -16,6 +16,46 @@ def deps do
 end
 ```
 
+## Requirements
+
+- Erlang 22+
+- Elixir 1.13+
+
+## API Documentation
+
+https://docs.opensea.io/reference/api-overview
+
+## REST API
+
+#### Assets
+
+- [ ] `GET /api/v1/assets`
+- [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/`
+- [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/validate`
+- [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/listings`
+- [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/offers`
+
+#### Events
+
+- [ ] `GET /api/v1/events`
+
+#### Collections
+
+- [x] `GET /api/v1/collections`
+- [ ] `GET /api/v1/collection/{collection_slug}`
+
+#### Bundles
+
+- [ ] `GET /api/v1/bundles`
+
+#### Contracts
+
+- [ ] `GET /api/v1/asset_contract/{asset_contract_address}`
+
+#### Orders
+
+- [ ] `GET /wyvern/v1/orders`
+
 ## Authors
 
 - Alex Kwiatkowski - alex+git@fremantle.io

@@ -1,0 +1,37 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-API-KEY": "***"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://api.opensea.io/api/v1/collections?limit=-1"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"limit\":[\"ensure this value is greater than or equal to 0\"]}",
+      "headers": {
+        "Date": "Tue, 17 May 2022 06:29:09 GMT",
+        "Content-Type": "application/json",
+        "Content-Length": "61",
+        "Connection": "keep-alive",
+        "Vary": "Accept, Cookie, Origin",
+        "Allow": "GET, OPTIONS",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "same-origin",
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "CF-Cache-Status": "MISS",
+        "Expect-CT": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
+        "Strict-Transport-Security": "max-age=0; includeSubDomains; preload",
+        "Server": "cloudflare"
+      },
+      "status_code": 400,
+      "type": "ok"
+    }
+  }
+]
