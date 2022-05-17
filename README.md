@@ -42,7 +42,7 @@ https://docs.opensea.io/reference/api-overview
 #### Collections
 
 - [x] `GET /api/v1/collections`
-- [ ] `GET /api/v1/collection/{collection_slug}`
+- [x] `GET /api/v1/collection/{collection_slug}`
 
 #### Bundles
 
