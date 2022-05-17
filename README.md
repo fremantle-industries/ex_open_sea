@@ -37,7 +37,7 @@ https://docs.opensea.io/reference/api-overview
 
 #### Events
 
-- [ ] `GET /api/v1/events`
+- [x] `GET /api/v1/events`
 
 #### Collections
 
