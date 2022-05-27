@@ -28,6 +28,7 @@ defmodule ExOpenSea.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:exvcr, "~> 0.10", only: [:dev, :test]},
+      {:mock, "~> 0.3", only: :test},
       {:ex_unit_notifier, "~> 1.0", only: :test},
     ]
   end

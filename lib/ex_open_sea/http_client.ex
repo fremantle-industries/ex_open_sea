@@ -4,7 +4,7 @@ defmodule ExOpenSea.HTTPClient do
   @type path :: String.t()
   @type uri :: String.t()
   @type api_key :: String.t()
-  @type error_reason :: Maptu.Extension.non_strict_error_reason() | HTTPoison.Error.t() | map
+  @type error_reason :: :timeout | Maptu.Extension.non_strict_error_reason() | HTTPoison.Error.t() | map
   @type auth_response :: {:ok, map} | {:error, error_reason}
 
   @spec domain :: String.t()
@@ -84,6 +84,10 @@ defmodule ExOpenSea.HTTPClient do
       true ->
         {:error, body}
     end
+  end
+
+  defp parse_response({:error, %HTTPoison.Error{reason: :timeout}}) do
+    {:error, :timeout}
   end
 
   defp parse_response({:error, _} = result) do

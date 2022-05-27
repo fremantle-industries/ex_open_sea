@@ -19,4 +19,8 @@ defmodule ExOpenSea.Collections.Show do
   defp parse_response({:error, %{"success" => false}}) do
     {:error, :not_found}
   end
+
+  defp parse_response({:error, _reason} = error) do
+    error
+  end
 end

@@ -29,7 +29,7 @@ defmodule ExOpenSea.Collections.List do
     )
   end
 
-  defp parse_response({:error, response_reasons}) do
+  defp parse_response({:error, response_reasons}) when is_map(response_reasons) do
     reasons = response_reasons
               |> Enum.reduce(
                 [],
@@ -39,5 +39,9 @@ defmodule ExOpenSea.Collections.List do
               )
 
     {:error, reasons}
+  end
+
+  defp parse_response({:error, _reason} = error) do
+    error
   end
 end
