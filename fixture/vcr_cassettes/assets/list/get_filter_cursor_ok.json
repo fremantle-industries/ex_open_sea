@@ -1,0 +1,80 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-API-KEY": "***"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://api.opensea.io/api/v1/assets?limit=1"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"next\":\"LXBrPTQ1NjExODA2Ng==\",\"previous\":null,\"assets\":[{\"id\":456118066,\"num_sales\":0,\"background_color\":null,\"image_url\":\"https://lh3.googleusercontent.com/hkyl3ff8zqjCOjxp_I7onxezZBbV3oCS7CxrH28sbLCV6__e5MPYX7HRnrE9KudNt0LFPqjv0Nyec2Ba3Ok27o1mNlY7Z1ps_tcdDA\",\"image_preview_url\":\"https://lh3.googleusercontent.com/hkyl3ff8zqjCOjxp_I7onxezZBbV3oCS7CxrH28sbLCV6__e5MPYX7HRnrE9KudNt0LFPqjv0Nyec2Ba3Ok27o1mNlY7Z1ps_tcdDA=s250\",\"image_thumbnail_url\":\"https://lh3.googleusercontent.com/hkyl3ff8zqjCOjxp_I7onxezZBbV3oCS7CxrH28sbLCV6__e5MPYX7HRnrE9KudNt0LFPqjv0Nyec2Ba3Ok27o1mNlY7Z1ps_tcdDA=s128\",\"image_original_url\":null,\"animation_url\":null,\"animation_original_url\":null,\"name\":\"Corum\",\"description\":null,\"external_link\":null,\"asset_contract\":{\"address\":\"0x495f947276749ce646f68ac8c248420045cb7b5e\",\"asset_contract_type\":\"semi-fungible\",\"created_date\":\"2020-12-02T17:40:53.232025\",\"name\":\"OpenSea Collection\",\"nft_version\":null,\"opensea_version\":\"2.0.0\",\"owner\":102384,\"schema_name\":\"ERC1155\",\"symbol\":\"OPENSTORE\",\"total_supply\":null,\"description\":\"\",\"external_link\":null,\"image_url\":\"https://lh3.googleusercontent.com/HMeSm6mM47Wkap8it2rXBbyCIF0wiAXpamQJQidiCmF4wL-zL5sS2UXZuH6jm65kpXy2XwaS1T9gkD7x2UbB34qlwTLMTBHmyqx5qA=s120\",\"default_to_fiat\":false,\"dev_buyer_fee_basis_points\":0,\"dev_seller_fee_basis_points\":0,\"only_proxied_transfers\":false,\"opensea_buyer_fee_basis_points\":0,\"opensea_seller_fee_basis_points\":250,\"buyer_fee_basis_points\":0,\"seller_fee_basis_points\":250,\"payout_address\":null},\"permalink\":\"https://opensea.io/assets/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/29487633736939614989013500550493663768092406037704643264871066224561418665985\",\"collection\":{\"banner_image_url\":null,\"chat_url\":null,\"created_date\":\"2022-05-28T12:37:45.221845\",\"default_to_fiat\":false,\"description\":null,\"dev_buyer_fee_basis_points\":\"0\",\"dev_seller_fee_basis_points\":\"0\",\"discord_url\":null,\"display_data\":{\"card_display_style\":\"contain\",\"images\":[]},\"external_url\":null,\"featured\":false,\"featured_image_url\":null,\"hidden\":true,\"safelist_request_status\":\"not_requested\",\"image_url\":null,\"is_subject_to_whitelist\":false,\"large_image_url\":null,\"medium_username\":null,\"name\":\"Red_Garden Collection\",\"only_proxied_transfers\":false,\"opensea_buyer_fee_basis_points\":\"0\",\"opensea_seller_fee_basis_points\":\"250\",\"payout_address\":null,\"require_email\":false,\"short_description\":null,\"slug\":\"red-garden-collection\",\"telegram_url\":null,\"twitter_username\":null,\"instagram_username\":null,\"wiki_url\":null,\"is_nsfw\":false},\"decimals\":null,\"token_metadata\":null,\"is_nsfw\":false,\"owner\":{\"user\":{\"username\":\"NullAddress\"},\"profile_img_url\":\"https://storage.googleapis.com/opensea-static/opensea-profile/1.png\",\"address\":\"0x0000000000000000000000000000000000000000\",\"config\":\"\"},\"sell_orders\":null,\"seaport_sell_orders\":null,\"creator\":{\"user\":{\"username\":\"Red_Garden\"},\"profile_img_url\":\"https://storage.googleapis.com/opensea-static/opensea-profile/13.png\",\"address\":\"0x413168c443432574b5d687b8ccc8d3de43b9ebf9\",\"config\":\"\"},\"traits\":[],\"last_sale\":null,\"top_bid\":null,\"listing_date\":null,\"is_presale\":true,\"transfer_fee_payment_token\":null,\"transfer_fee\":null,\"token_id\":\"29487633736939614989013500550493663768092406037704643264871066224561418665985\"}]}",
+      "headers": {
+        "Date": "Sat, 28 May 2022 22:51:33 GMT",
+        "Content-Type": "application/json",
+        "Content-Length": "3239",
+        "Connection": "keep-alive",
+        "Vary": "Accept, Cookie, Origin",
+        "Allow": "OPTIONS, GET",
+        "Expires": "Sat, 28 May 2022 22:56:33 GMT",
+        "Cache-Control": "max-age=300",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "same-origin",
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "CF-Cache-Status": "EXPIRED",
+        "Last-Modified": "Sat, 28 May 2022 22:35:56 GMT",
+        "Accept-Ranges": "bytes",
+        "Expect-CT": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
+        "Strict-Transport-Security": "max-age=0; includeSubDomains; preload",
+        "Server": "cloudflare"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  },
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-API-KEY": "***"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://api.opensea.io/api/v1/assets?limit=1&cursor=LXBrPTQ1NjExODA2Ng%3D%3D"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"next\":\"LXBrPTQ1NjExODA1OQ==\",\"previous\":\"cj0xJi1waz00NTYxMTgwNTk=\",\"assets\":[{\"id\":456118059,\"num_sales\":0,\"background_color\":null,\"image_url\":\"https://lh3.googleusercontent.com/CLrh8IyrqXoc_Qn8Fys2oOpC9d0GiYLV_cyzwBJdrU3fdImzgoKd93_clxLGsY8jz4RQGGzlFct_diT5LOY6DSpKZc2TwxNcJ8lv\",\"image_preview_url\":\"https://lh3.googleusercontent.com/CLrh8IyrqXoc_Qn8Fys2oOpC9d0GiYLV_cyzwBJdrU3fdImzgoKd93_clxLGsY8jz4RQGGzlFct_diT5LOY6DSpKZc2TwxNcJ8lv=s250\",\"image_thumbnail_url\":\"https://lh3.googleusercontent.com/CLrh8IyrqXoc_Qn8Fys2oOpC9d0GiYLV_cyzwBJdrU3fdImzgoKd93_clxLGsY8jz4RQGGzlFct_diT5LOY6DSpKZc2TwxNcJ8lv=s128\",\"image_original_url\":null,\"animation_url\":null,\"animation_original_url\":null,\"name\":\"beast friend \",\"description\":\"The number of transient homeless people increased markedly in the U.S. after the industrial recession of the early 1870s. Initially, the term \\\"tramp\\\" had a broad meaning, and was often used to refer to migrant workers who were looking for permanent work and lodgings. Later the term acquired a narrower meaning, to refer only to those who prefer the transient way of life.[2] Writing in 1877 Allan Pinkerton said:\",\"external_link\":null,\"asset_contract\":{\"address\":\"0x495f947276749ce646f68ac8c248420045cb7b5e\",\"asset_contract_type\":\"semi-fungible\",\"created_date\":\"2020-12-02T17:40:53.232025\",\"name\":\"OpenSea Collection\",\"nft_version\":null,\"opensea_version\":\"2.0.0\",\"owner\":102384,\"schema_name\":\"ERC1155\",\"symbol\":\"OPENSTORE\",\"total_supply\":null,\"description\":\"\",\"external_link\":null,\"image_url\":\"https://lh3.googleusercontent.com/HMeSm6mM47Wkap8it2rXBbyCIF0wiAXpamQJQidiCmF4wL-zL5sS2UXZuH6jm65kpXy2XwaS1T9gkD7x2UbB34qlwTLMTBHmyqx5qA=s120\",\"default_to_fiat\":false,\"dev_buyer_fee_basis_points\":0,\"dev_seller_fee_basis_points\":0,\"only_proxied_transfers\":false,\"opensea_buyer_fee_basis_points\":0,\"opensea_seller_fee_basis_points\":250,\"buyer_fee_basis_points\":0,\"seller_fee_basis_points\":250,\"payout_address\":null},\"permalink\":\"https://opensea.io/assets/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/47467683422215059037281828357838328322491741125463086484853311734960141369345\",\"collection\":{\"banner_image_url\":\"https://lh3.googleusercontent.com/6yzn5CkibjxhGMuGt1IsxpBEUjXlO5zav_CwYecivkXVD_wCvK3h98suDZf5owwcQm1WPpjpfp8SeINOcggpnKoTrz6Iq_GmIuuUCw=s2500\",\"chat_url\":null,\"created_date\":\"2022-05-28T21:57:22.345204\",\"default_to_fiat\":false,\"description\":\"- Play with $3300 - Play with $3300 + 50 Free Spins\\nThe Best Online Casino Games Only at CoolCat Casino CoolCat Casino is where you'll find the coolest cats playing the best online casino games around! With over 220 options and more being added every month, there's no shortage of entertaining and rewarding games to choose from. Of those 220 games, over 140 are a unique collection of slot machines!\",\"dev_buyer_fee_basis_points\":\"0\",\"dev_seller_fee_basis_points\":\"1000\",\"discord_url\":\"https://discord.gg/freedom_life#7189\",\"display_data\":{\"card_display_style\":\"contain\"},\"external_url\":\"https://www.realbikelifeonly.com/\",\"featured\":false,\"featured_image_url\":\"https://lh3.googleusercontent.com/NEev640H49Q9GEN6Q38UMIkY9hP-mGjO9o-qCl_ckqn6j4Ywn7OsUNpiszn4fPxMaJ92eLRVly5SuzvO0MSYPNODiaparMM54QXdEA=s300\",\"hidden\":false,\"safelist_request_status\":\"not_requested\",\"image_url\":\"https://lh3.googleusercontent.com/Np9fzBy9hQHhAmvxSFNK8CG003m0rES7XW8ULWbudlnd2It0KxzbzTZHNnZc4w1Lrlqq8vpbBwGRsWfNs16p1WA7IKtA8k6Rcdk5jw=s120\",\"is_subject_to_whitelist\":false,\"large_image_url\":\"https://lh3.googleusercontent.com/NEev640H49Q9GEN6Q38UMIkY9hP-mGjO9o-qCl_ckqn6j4Ywn7OsUNpiszn4fPxMaJ92eLRVly5SuzvO0MSYPNODiaparMM54QXdEA=s300\",\"medium_username\":\"Maiami hitters \",\"name\":\"freedom life#7189\",\"only_proxied_transfers\":false,\"opensea_buyer_fee_basis_points\":\"0\",\"opensea_seller_fee_basis_points\":\"250\",\"payout_address\":\"0x68f1c1b915ec238cec8851cf5c38b98b74560121\",\"require_email\":false,\"short_description\":null,\"slug\":\"freedom-life-7189\",\"telegram_url\":null,\"twitter_username\":null,\"instagram_username\":\"@etgar_S2\",\"wiki_url\":null,\"is_nsfw\":false},\"decimals\":null,\"token_metadata\":null,\"is_nsfw\":false,\"owner\":{\"user\":{\"username\":\"NullAddress\"},\"profile_img_url\":\"https://storage.googleapis.com/opensea-static/opensea-profile/1.png\",\"address\":\"0x0000000000000000000000000000000000000000\",\"config\":\"\"},\"sell_orders\":null,\"seaport_sell_orders\":null,\"creator\":{\"user\":{\"username\":\"Freedomlife7189\"},\"profile_img_url\":\"https://storage.googleapis.com/opensea-static/opensea-profile/28.png\",\"address\":\"0x68f1c1b915ec238cec8851cf5c38b98b74560121\",\"config\":\"\"},\"traits\":[{\"trait_type\":\"black cap\",\"value\":\"0.13% have this item\",\"display_type\":null,\"max_value\":null,\"trait_count\":0,\"order\":null}],\"last_sale\":null,\"top_bid\":null,\"listing_date\":null,\"is_presale\":true,\"transfer_fee_payment_token\":null,\"transfer_fee\":null,\"token_id\":\"47467683422215059037281828357838328322491741125463086484853311734960141369345\"}]}",
+      "headers": {
+        "Date": "Sat, 28 May 2022 22:51:33 GMT",
+        "Content-Type": "application/json",
+        "Content-Length": "4869",
+        "Connection": "keep-alive",
+        "Vary": "Accept, Cookie, Origin",
+        "Allow": "OPTIONS, GET",
+        "Expires": "Sat, 28 May 2022 22:56:33 GMT",
+        "Cache-Control": "max-age=300",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "same-origin",
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "CF-Cache-Status": "MISS",
+        "Last-Modified": "Sat, 28 May 2022 22:51:33 GMT",
+        "Accept-Ranges": "bytes",
+        "Expect-CT": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
+        "Strict-Transport-Security": "max-age=0; includeSubDomains; preload",
+        "Server": "cloudflare"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

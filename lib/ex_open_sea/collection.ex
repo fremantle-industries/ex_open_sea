@@ -74,4 +74,3 @@ defmodule ExOpenSea.Collection do
     wiki_url
   ]a
 end
-

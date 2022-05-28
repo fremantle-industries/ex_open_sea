@@ -1,6 +1,9 @@
 defmodule ExOpenSea.HTTPClient do
+  alias ExOpenSea.QueryEncoders
+
   @type verb :: :get | :post | :put | :delete
   @type params :: map
+  @type query_encoder :: module
   @type path :: String.t()
   @type uri :: String.t()
   @type api_key :: String.t()
@@ -20,13 +23,16 @@ defmodule ExOpenSea.HTTPClient do
   def url(uri), do: origin() <> uri
 
   @spec auth_get(path, api_key, params) :: auth_response
-  def auth_get(path, api_key, params) do
-    auth_request(:get, path |> to_uri(params), api_key, "")
+  @spec auth_get(path, api_key, params, query_encoder) :: auth_response
+  def auth_get(path, api_key, params, query_encoder \\ QueryEncoders.WwwForm) do
+    uri = to_uri(path, params, query_encoder)
+    auth_request(:get, uri, api_key, "")
   end
 
   @spec auth_post(path, api_key, params) :: auth_response
-  def auth_post(path, api_key, params) do
-    uri = path |> to_uri(%{})
+  @spec auth_post(path, api_key, params, query_encoder) :: auth_response
+  def auth_post(path, api_key, params, query_encoder \\ QueryEncoders.WwwForm) do
+    uri = to_uri(path, %{}, query_encoder)
     body = Jason.encode!(params)
     auth_request(:post, uri, api_key, body)
   end
@@ -47,10 +53,12 @@ defmodule ExOpenSea.HTTPClient do
     |> send
   end
 
-  defp to_uri(path, params) do
+  defp to_uri(path, params, query_encoder) do
+    query = query_encoder.encode(params)
+
     %URI{
       path: path,
-      query: URI.encode_query(params)
+      query: query
     }
     |> URI.to_string()
     |> String.trim("?")
