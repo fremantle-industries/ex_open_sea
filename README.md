@@ -30,7 +30,7 @@ https://docs.opensea.io/reference/api-overview
 #### Assets
 
 - [x] `GET /api/v1/assets`
-- [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/`
+- [x] `GET /api/v1/asset/{asset_contract_address}/{token_id}/`
 - [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/validate`
 - [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/listings`
 - [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/offers`
