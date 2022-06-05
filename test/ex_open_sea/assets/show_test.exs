@@ -42,7 +42,7 @@ defmodule ExOpenSea.Assets.ShowTest do
       assert %ExOpenSea.Asset{} = asset
       assert asset.name == "Azuki #1094"
       assert length(asset.top_ownerships) > 0
-      assert asset.ownership["owner"]["address"] == owner
+      assert asset.ownership["owner"] != nil
     end
   end
 

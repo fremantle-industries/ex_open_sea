@@ -1,4 +1,21 @@
 defmodule ExOpenSea.Collections.Index do
+  @moduledoc """
+  Return a list of all the collections supported and vetted by OpenSea. To include all collections
+  relevant to a user (including non-whitelisted ones) include the `asset_owner` parameter.
+
+  Each collection in the response has an attribute called `primary_asset_contracts` with info about
+  the smart contracts belonging to that collection. For example, ERC-1155 contracts maybe have
+  multiple collections all referencing the same contract, but many ERC-721 contracts may all
+  belong to the same collection (dapp).
+
+  You can also use this endpoint to find which dapps an account uses, and how many items they own
+  in each in a single API call.
+
+  https://docs.opensea.io/reference/retrieving-collections
+  """
+
+  alias ExOpenSea.Http
+
   @type api_key :: ExOpenSea.ApiKey.t()
   @type params :: %{
     optional(:asset_owner) => String.t(),
@@ -13,7 +30,10 @@ defmodule ExOpenSea.Collections.Index do
   @spec get(api_key, params) :: result
   def get(api_key, params \\ %{}) do
     "/api/v1/collections"
-    |> ExOpenSea.HTTPClient.auth_get(api_key, params)
+    |> Http.Request.for_path()
+    |> Http.Request.with_query(params)
+    |> Http.Request.with_auth(api_key)
+    |> Http.Client.get()
     |> parse_response()
   end
 

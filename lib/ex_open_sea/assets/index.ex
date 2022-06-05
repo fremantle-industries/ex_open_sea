@@ -9,6 +9,8 @@ defmodule ExOpenSea.Assets.Index do
   https://docs.opensea.io/reference/getting-assets
   """
 
+  alias ExOpenSea.Http
+
   @type api_key :: ExOpenSea.ApiKey.t()
   @type params :: %{
     optional(:owner) => String.t(),
@@ -33,7 +35,10 @@ defmodule ExOpenSea.Assets.Index do
   @spec get(api_key, params) :: result
   def get(api_key, params \\ %{}) do
     "/api/v1/assets"
-    |> ExOpenSea.HTTPClient.auth_get(api_key, params, @query_encoder)
+    |> Http.Request.for_path()
+    |> Http.Request.with_query(params, @query_encoder)
+    |> Http.Request.with_auth(api_key)
+    |> Http.Client.get()
     |> parse_response()
   end
 
@@ -43,7 +48,7 @@ defmodule ExOpenSea.Assets.Index do
     |> Enum.reduce(
       {:ok, []},
       fn
-        {:ok, i}, {:ok, acc} -> {:ok, [i | acc]}
+        {:ok, a}, {:ok, acc} -> {:ok, acc ++ [a]}
         _, _acc -> {:error, :parse_result_item}
       end
     )

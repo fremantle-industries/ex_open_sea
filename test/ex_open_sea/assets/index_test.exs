@@ -98,9 +98,9 @@ defmodule ExOpenSea.Assets.IndexTest do
       assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key, %{asset_contract_addresses: [@azuki_contract_address, @doodles_contract_address], token_ids: [1, 1]})
       assert length(cursor.assets) == 2
       assert %ExOpenSea.Asset{} = asset_1 = Enum.at(cursor.assets, 0)
-      assert asset_1.collection["name"] == "Doodles"
+      assert asset_1.collection["name"] == "Azuki"
       assert %ExOpenSea.Asset{} = asset_2 = Enum.at(cursor.assets, 1)
-      assert asset_2.collection["name"] == "Azuki"
+      assert asset_2.collection["name"] == "Doodles"
     end
   end
 

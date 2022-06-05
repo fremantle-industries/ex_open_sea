@@ -1,4 +1,17 @@
 defmodule ExOpenSea.Events.Index do
+  @moduledoc """
+  Return a list of events that occur on the NFTs that are tracked by OpenSea. The event_type field
+  indicates the type of event (transfer, successful auction, etc) and the results are sorted by
+  event timestamp.
+
+  Note that due to block reorganizations, recent events (less than 10 minutes old) may not reflect
+  the final state of the blockchain.
+
+  https://docs.opensea.io/reference/retrieving-asset-events
+  """
+
+  alias ExOpenSea.Http
+
   @type api_key :: ExOpenSea.ApiKey.t()
   @type params :: %{
     optional(:only_opensea) => boolean,
@@ -19,7 +32,10 @@ defmodule ExOpenSea.Events.Index do
   @spec get(api_key, params) :: result
   def get(api_key, params \\ %{}) do
     "/api/v1/events"
-    |> ExOpenSea.HTTPClient.auth_get(api_key, params)
+    |> Http.Request.for_path()
+    |> Http.Request.with_query(params)
+    |> Http.Request.with_auth(api_key)
+    |> Http.Client.get()
     |> parse_response()
   end
 
