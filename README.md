@@ -11,7 +11,7 @@ Add the `ex_open_sea` package to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_open_sea, "~> 0.0.4"}
+    {:ex_open_sea, "~> 0.0.5"}
   ]
 end
 ```
