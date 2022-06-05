@@ -6,6 +6,8 @@ defmodule ExOpenSea.Assets.Show do
   https://docs.opensea.io/reference/retrieving-a-single-asset
   """
 
+  alias ExOpenSea.Http
+
   @type api_key :: ExOpenSea.ApiKey.t()
   @type contract_address :: String.t()
   @type token_id :: non_neg_integer
@@ -21,7 +23,10 @@ defmodule ExOpenSea.Assets.Show do
   @spec get(api_key, contract_address, token_id, params) :: result
   def get(api_key, contract_address, token_id, params \\ %{}) do
     "/api/v1/asset/#{contract_address}/#{token_id}"
-    |> ExOpenSea.HTTPClient.auth_get(api_key, params)
+    |> Http.Request.for_path()
+    |> Http.Request.with_query(params)
+    |> Http.Request.with_auth(api_key)
+    |> Http.Client.get()
     |> parse_response()
   end
 

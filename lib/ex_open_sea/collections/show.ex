@@ -1,4 +1,13 @@
 defmodule ExOpenSea.Collections.Show do
+  @moduledoc """
+  Return in-depth information about an individual collection, including real time statistics such
+  as floor price.
+
+  https://docs.opensea.io/reference/retrieving-a-single-collection
+  """
+
+  alias ExOpenSea.Http
+
   @type slug :: ExOpenSea.Collection.slug()
   @type api_key :: ExOpenSea.ApiKey.t()
   @type collection :: ExOpenSea.Collection.t()
@@ -8,7 +17,9 @@ defmodule ExOpenSea.Collections.Show do
   @spec get(slug, api_key) :: result
   def get(collection_slug, api_key) do
     "/api/v1/collection/#{collection_slug}"
-    |> ExOpenSea.HTTPClient.auth_get(api_key, %{})
+    |> Http.Request.for_path()
+    |> Http.Request.with_auth(api_key)
+    |> Http.Client.get()
     |> parse_response()
   end
 

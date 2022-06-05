@@ -7,7 +7,7 @@ defmodule ExOpenSea.Http.Client do
   @type result :: {:ok, data} | {:error, error_reason}
 
   @spec domain :: String.t()
-  def domain, do: Application.get_env(:ex_open_sea, :domain, "api-devnet.magiceden.dev")
+  def domain, do: Application.get_env(:ex_open_sea, :domain, "api.opensea.io")
 
   @spec protocol :: String.t()
   def protocol, do: Application.get_env(:ex_open_sea, :protocol, "https")
