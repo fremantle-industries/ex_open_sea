@@ -1,4 +1,4 @@
-defmodule ExOpenSea.Assets.List do
+defmodule ExOpenSea.Assets.Index do
   @moduledoc """
   Return a cursor to a list of NFTs based on the specified filter parameters.
 
