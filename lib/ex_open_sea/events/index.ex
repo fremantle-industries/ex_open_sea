@@ -1,4 +1,4 @@
-defmodule ExOpenSea.Events.List do
+defmodule ExOpenSea.Events.Index do
   @type api_key :: ExOpenSea.ApiKey.t()
   @type params :: %{
     optional(:only_opensea) => boolean,
