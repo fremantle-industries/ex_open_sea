@@ -1,10 +1,16 @@
 defmodule ExOpenSea.Assets.ShowTest do
   use ExUnit.Case, async: false
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
-  import Mock
+  use WithEnv
   doctest ExOpenSea.Assets.Show
 
   @api_key ExOpenSea.ApiKey.get()
+
+  defmodule ErrorAdapter do
+    def send(_request) do
+      {:error, :from_adapter}
+    end
+  end
 
   setup_all do
     HTTPoison.start()
@@ -47,8 +53,8 @@ defmodule ExOpenSea.Assets.ShowTest do
   end
 
   test ".get/n bubbles error tuples" do
-    with_mock HTTPoison, request: fn _url -> {:error, %HTTPoison.Error{reason: :timeout}} end do
-      assert ExOpenSea.Assets.Show.get(@api_key, @azuki_contract_address, 1) == {:error, :timeout}
+    with_env put: [ex_open_sea: [adapter: ErrorAdapter]] do
+      assert ExOpenSea.Assets.Show.get(@api_key, @azuki_contract_address, 1) == {:error, :from_adapter}
     end
   end
 end
