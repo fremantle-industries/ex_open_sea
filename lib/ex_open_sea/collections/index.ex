@@ -1,4 +1,4 @@
-defmodule ExOpenSea.Collections.List do
+defmodule ExOpenSea.Collections.Index do
   @type api_key :: ExOpenSea.ApiKey.t()
   @type params :: %{
     optional(:asset_owner) => String.t(),
