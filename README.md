@@ -33,7 +33,7 @@ https://docs.opensea.io/reference/api-overview
 - [x] `GET /api/v1/asset/{asset_contract_address}/{token_id}/`
 - [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/validate`
 - [x] `GET /api/v1/asset/{asset_contract_address}/{token_id}/listings`
-- [ ] `GET /api/v1/asset/{asset_contract_address}/{token_id}/offers`
+- [x] `GET /api/v1/asset/{asset_contract_address}/{token_id}/offers`
 
 #### Events
 
