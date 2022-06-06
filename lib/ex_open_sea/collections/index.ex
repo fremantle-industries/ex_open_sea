@@ -16,7 +16,6 @@ defmodule ExOpenSea.Collections.Index do
 
   alias ExOpenSea.Http
 
-  @type api_key :: ExOpenSea.ApiKey.t()
   @type params :: %{
     optional(:asset_owner) => String.t(),
     optional(:offset) => non_neg_integer,
@@ -26,13 +25,11 @@ defmodule ExOpenSea.Collections.Index do
   @type error_reason :: :parse_result_item | String.t()
   @type result :: {:ok, [collection]} | {:error, error_reason}
 
-  @spec get(api_key) :: result
-  @spec get(api_key, params) :: result
-  def get(api_key, params \\ %{}) do
+  @spec get(params) :: result
+  def get(params \\ %{}) do
     "/api/v1/collections"
     |> Http.Request.for_path()
     |> Http.Request.with_query(params)
-    |> Http.Request.with_auth(api_key)
     |> Http.Client.get()
     |> parse_response()
   end

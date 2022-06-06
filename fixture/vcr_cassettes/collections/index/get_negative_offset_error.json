@@ -2,10 +2,7 @@
   {
     "request": {
       "body": "",
-      "headers": {
-        "Content-Type": "application/json",
-        "X-API-KEY": "***"
-      },
+      "headers": [],
       "method": "get",
       "options": [],
       "request_body": "",
@@ -15,12 +12,12 @@
       "binary": false,
       "body": "{\"offset\":[\"ensure this value is greater than or equal to 0\"]}",
       "headers": {
-        "Date": "Tue, 17 May 2022 06:27:33 GMT",
+        "Date": "Mon, 06 Jun 2022 06:03:25 GMT",
         "Content-Type": "application/json",
         "Content-Length": "62",
         "Connection": "keep-alive",
         "Vary": "Accept, Cookie, Origin",
-        "Allow": "OPTIONS, GET",
+        "Allow": "GET, OPTIONS",
         "X-Frame-Options": "DENY",
         "X-Content-Type-Options": "nosniff",
         "Referrer-Policy": "same-origin",
