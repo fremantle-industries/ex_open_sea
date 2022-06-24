@@ -20,7 +20,9 @@ defmodule ExOpenSea.Events.IndexTest do
   test ".get/1" do
     use_cassette "events/index/get_ok" do
       assert {:ok, events_response} = ExOpenSea.Events.Index.get(@api_key)
-      assert events_response.asset_events != nil
+      assert length(events_response.asset_events) > 1
+      assert %ExOpenSea.AssetEvent{} = asset_event = Enum.at(events_response.asset_events, 0)
+      assert asset_event.event_type != nil
     end
   end
 
