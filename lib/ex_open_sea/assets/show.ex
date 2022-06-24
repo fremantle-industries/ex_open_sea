@@ -12,12 +12,12 @@ defmodule ExOpenSea.Assets.Show do
   @type contract_address :: String.t()
   @type token_id :: non_neg_integer
   @type params :: %{
-    optional(:account_address) => String.t(),
-    optional(:include_orders) => boolean
-  }
-  @type assets_cursor :: ExOpenSea.AssetsCursor.t()
+          optional(:account_address) => String.t(),
+          optional(:include_orders) => boolean
+        }
+  @type asset :: ExOpenSea.Asset.t()
   @type error_reason :: :parse_result_item | String.t()
-  @type result :: {:ok, assets_cursor} | {:error, error_reason}
+  @type result :: {:ok, asset} | {:error, error_reason}
 
   @spec get(api_key, contract_address, token_id) :: result
   @spec get(api_key, contract_address, token_id, params) :: result
@@ -30,18 +30,35 @@ defmodule ExOpenSea.Assets.Show do
     |> parse_response()
   end
 
-  defp parse_response({:ok, data}) do
-    Mapail.map_to_struct(data, ExOpenSea.Asset)
+  defp parse_response({:ok, %{"traits" => raw_traits} = data}) do
+    raw_traits
+    |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.Trait))
+    |> Enum.reduce(
+      {:ok, []},
+      fn
+        {:ok, i}, {:ok, acc} -> {:ok, [i | acc]}
+        _, _acc -> {:error, :parse_result_item}
+      end
+    )
+    |> case do
+      {:ok, traits} ->
+        %{data | "traits" => traits}
+        |> Mapail.map_to_struct(ExOpenSea.Asset)
+
+      {:error, _} = error ->
+        error
+    end
   end
 
   defp parse_response({:error, response_reasons}) when is_map(response_reasons) do
-    reasons = response_reasons
-              |> Enum.reduce(
-                [],
-                fn {k, v}, acc ->
-                  acc ++ [{k, v}]
-                end
-              )
+    reasons =
+      response_reasons
+      |> Enum.reduce(
+        [],
+        fn {k, v}, acc ->
+          acc ++ [{k, v}]
+        end
+      )
 
     {:error, reasons}
   end

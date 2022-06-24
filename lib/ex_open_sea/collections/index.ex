@@ -17,10 +17,10 @@ defmodule ExOpenSea.Collections.Index do
   alias ExOpenSea.Http
 
   @type params :: %{
-    optional(:asset_owner) => String.t(),
-    optional(:offset) => non_neg_integer,
-    optional(:limit) => non_neg_integer,
-  }
+          optional(:asset_owner) => String.t(),
+          optional(:offset) => non_neg_integer,
+          optional(:limit) => non_neg_integer
+        }
   @type collection :: ExOpenSea.Collection.t()
   @type error_reason :: :parse_result_item | String.t()
   @type result :: {:ok, [collection]} | {:error, error_reason}
@@ -34,9 +34,27 @@ defmodule ExOpenSea.Collections.Index do
     |> parse_response()
   end
 
-  defp parse_response({:ok, %{"collections" => collections}}) do
-    collections
-    |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.Collection))
+  defp parse_response({:ok, %{"collections" => raw_collections}}) do
+    raw_collections
+    |> Enum.map(fn %{"traits" => raw_traits} = c ->
+      raw_traits
+      |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.Trait))
+      |> Enum.reduce(
+        {:ok, []},
+        fn
+          {:ok, i}, {:ok, acc} -> {:ok, [i | acc]}
+          _, _acc -> {:error, :parse_result_item}
+        end
+      )
+      |> case do
+        {:ok, traits} ->
+          %{c | "traits" => traits}
+          |> Mapail.map_to_struct(ExOpenSea.Collection)
+
+        {:error, _} = error ->
+          error
+      end
+    end)
     |> Enum.reduce(
       {:ok, []},
       fn
@@ -47,13 +65,14 @@ defmodule ExOpenSea.Collections.Index do
   end
 
   defp parse_response({:error, response_reasons}) when is_map(response_reasons) do
-    reasons = response_reasons
-              |> Enum.reduce(
-                [],
-                fn {k, v}, acc ->
-                  acc ++ [{k, v}]
-                end
-              )
+    reasons =
+      response_reasons
+      |> Enum.reduce(
+        [],
+        fn {k, v}, acc ->
+          acc ++ [{k, v}]
+        end
+      )
 
     {:error, reasons}
   end

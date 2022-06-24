@@ -52,7 +52,9 @@ defmodule ExOpenSea.Collections.IndexTest do
     use_cassette "collections/index/get_negative_offset_error" do
       assert {:error, error_reasons} = ExOpenSea.Collections.Index.get(%{offset: -1})
       assert length(error_reasons) == 1
-      assert Enum.at(error_reasons, 0) == {"offset", ["ensure this value is greater than or equal to 0"]}
+
+      assert Enum.at(error_reasons, 0) ==
+               {"offset", ["ensure this value is greater than or equal to 0"]}
     end
   end
 
@@ -60,7 +62,9 @@ defmodule ExOpenSea.Collections.IndexTest do
     use_cassette "collections/index/get_negative_limit_error" do
       assert {:error, error_reasons} = ExOpenSea.Collections.Index.get(%{limit: -1})
       assert length(error_reasons) == 1
-      assert Enum.at(error_reasons, 0) == {"limit", ["ensure this value is greater than or equal to 0"]}
+
+      assert Enum.at(error_reasons, 0) ==
+               {"limit", ["ensure this value is greater than or equal to 0"]}
     end
   end
 
