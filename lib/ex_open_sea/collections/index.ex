@@ -17,13 +17,14 @@ defmodule ExOpenSea.Collections.Index do
   alias ExOpenSea.Http
 
   @type params :: %{
-    optional(:asset_owner) => String.t(),
-    optional(:offset) => non_neg_integer,
-    optional(:limit) => non_neg_integer,
-  }
+          optional(:asset_owner) => String.t(),
+          optional(:offset) => non_neg_integer,
+          optional(:limit) => non_neg_integer
+        }
   @type collection :: ExOpenSea.Collection.t()
   @type error_reason :: :parse_result_item | String.t()
-  @type result :: {:ok, [collection]} | {:error, error_reason}
+  @type raw_payload :: map
+  @type result :: {:ok, [collection], raw_payload} | {:error, error_reason, raw_payload | nil}
 
   @spec get(params) :: result
   def get(params \\ %{}) do
@@ -34,31 +35,35 @@ defmodule ExOpenSea.Collections.Index do
     |> parse_response()
   end
 
-  defp parse_response({:ok, %{"collections" => collections}}) do
-    collections
-    |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.Collection))
-    |> Enum.reduce(
-      {:ok, []},
-      fn
-        {:ok, i}, {:ok, acc} -> {:ok, [i | acc]}
-        _, _acc -> {:error, :parse_result_item}
-      end
-    )
+  defp parse_response({:ok, %{"collections" => raw_collections} = raw_payload}) do
+    {ok_or_error, parsed_collections} =
+      raw_collections
+      |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.Collection))
+      |> Enum.reduce(
+        {:ok, []},
+        fn
+          {:ok, c}, {:ok, acc} -> {:ok, [c | acc]}
+          _, _acc -> {:error, :parse_result_item}
+        end
+      )
+
+    {ok_or_error, parsed_collections, raw_payload}
   end
 
-  defp parse_response({:error, response_reasons}) when is_map(response_reasons) do
-    reasons = response_reasons
-              |> Enum.reduce(
-                [],
-                fn {k, v}, acc ->
-                  acc ++ [{k, v}]
-                end
-              )
+  defp parse_response({:error, raw_reasons}) when is_map(raw_reasons) do
+    reasons =
+      raw_reasons
+      |> Enum.reduce(
+        [],
+        fn {k, v}, acc ->
+          acc ++ [{k, v}]
+        end
+      )
 
-    {:error, reasons}
+    {:error, reasons, raw_reasons}
   end
 
-  defp parse_response({:error, _reason} = error) do
-    error
+  defp parse_response({:error, reason}) do
+    {:error, reason, nil}
   end
 end

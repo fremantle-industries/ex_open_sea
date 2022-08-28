@@ -2,6 +2,7 @@ defmodule ExOpenSea.AssetOffers.IndexTest do
   use ExUnit.Case, async: false
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
   use WithEnv
+  alias ExOpenSea.AssetOffers.Index
   doctest ExOpenSea.AssetOffers.Index
 
   @api_key ExOpenSea.ApiKey.get()
@@ -21,26 +22,27 @@ defmodule ExOpenSea.AssetOffers.IndexTest do
 
   test ".get/1" do
     use_cassette "asset_offers/index/get_ok" do
-      assert {:ok, offers} = ExOpenSea.AssetOffers.Index.get(@api_key, @contract_address, @token_id)
+      assert {:ok, offers, raw_payload} = Index.get(@api_key, @contract_address, @token_id)
       assert length(offers) >= 1
       assert %ExOpenSea.AssetOffer{} = offer = Enum.at(offers, 0)
       assert offer.created_date != nil
+      assert Map.get(raw_payload, "offers") != nil
     end
   end
 
   test ".get/2 can filter by limit" do
     use_cassette "asset_offers/index/get_filter_limit_ok", match_requests_on: [:query] do
-      assert {:ok, offers} = ExOpenSea.AssetOffers.Index.get(@api_key, @contract_address, @token_id)
+      assert {:ok, offers, _} = Index.get(@api_key, @contract_address, @token_id)
       assert length(offers) > 1
 
-      assert {:ok, offers} = ExOpenSea.AssetOffers.Index.get(@api_key, @contract_address, @token_id, %{limit: 1})
+      assert {:ok, offers, _} = Index.get(@api_key, @contract_address, @token_id, %{limit: 1})
       assert length(offers) == 1
     end
   end
 
   test ".send/1 bubbles adapter errors" do
     with_env put: [ex_open_sea: [adapter: ErrorAdapter]] do
-      assert ExOpenSea.AssetOffers.Index.get(@api_key, @contract_address, @token_id) == {:error, :from_adapter}
+      assert Index.get(@api_key, @contract_address, @token_id) == {:error, :from_adapter, nil}
     end
   end
 end

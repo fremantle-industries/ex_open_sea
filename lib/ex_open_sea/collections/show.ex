@@ -12,7 +12,8 @@ defmodule ExOpenSea.Collections.Show do
   @type api_key :: ExOpenSea.ApiKey.t()
   @type collection :: ExOpenSea.Collection.t()
   @type error_reason :: :not_found | :parse_result_item | String.t()
-  @type result :: {:ok, collection} | {:error, error_reason}
+  @type raw_payload :: map
+  @type result :: {:ok, collection, raw_payload} | {:error, error_reason, raw_payload | nil}
 
   @spec get(slug, api_key) :: result
   def get(collection_slug, api_key) do
@@ -23,15 +24,18 @@ defmodule ExOpenSea.Collections.Show do
     |> parse_response()
   end
 
-  defp parse_response({:ok, %{"collection" => collection}}) do
-    Mapail.map_to_struct(collection, ExOpenSea.Collection)
+  defp parse_response({:ok, %{"collection" => raw_collection} = raw_payload}) do
+    {ok_or_error, collection_or_reason} =
+      Mapail.map_to_struct(raw_collection, ExOpenSea.Collection)
+
+    {ok_or_error, collection_or_reason, raw_payload}
   end
 
-  defp parse_response({:error, %{"success" => false}}) do
-    {:error, :not_found}
+  defp parse_response({:error, %{"success" => false} = raw_payload}) do
+    {:error, :not_found, raw_payload}
   end
 
-  defp parse_response({:error, _reason} = error) do
-    error
+  defp parse_response({:error, reason}) do
+    {:error, reason, nil}
   end
 end

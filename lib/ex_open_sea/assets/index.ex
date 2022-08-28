@@ -13,21 +13,22 @@ defmodule ExOpenSea.Assets.Index do
 
   @type api_key :: ExOpenSea.ApiKey.t()
   @type params :: %{
-    optional(:owner) => String.t(),
-    optional(:token_ids) => [String.t()],
-    # unsure how :collection is different to :collection_slug based on the docs???
-    optional(:collection) => String.t(),
-    optional(:collection_slug) => String.t(),
-    optional(:order_direction) => String.t(),
-    optional(:asset_contract_address) => String.t(),
-    optional(:asset_contract_addresses) => [String.t()],
-    optional(:limit) => String.t(),
-    optional(:cursor) => String.t(),
-    optional(:include_orders) => boolean
-  }
+          optional(:owner) => String.t(),
+          optional(:token_ids) => [String.t()],
+          # unsure how :collection is different to :collection_slug based on the docs???
+          optional(:collection) => String.t(),
+          optional(:collection_slug) => String.t(),
+          optional(:order_direction) => String.t(),
+          optional(:asset_contract_address) => String.t(),
+          optional(:asset_contract_addresses) => [String.t()],
+          optional(:limit) => String.t(),
+          optional(:cursor) => String.t(),
+          optional(:include_orders) => boolean
+        }
   @type assets_cursor :: ExOpenSea.AssetsCursor.t()
   @type error_reason :: :parse_result_item | String.t()
-  @type result :: {:ok, assets_cursor} | {:error, error_reason}
+  @type raw_payload :: map
+  @type result :: {:ok, assets_cursor} | {:error, error_reason, raw_payload | nil}
 
   @query_encoder ExOpenSea.QueryEncoders.SingleKeyMultipleValueWwwForm
 
@@ -42,7 +43,10 @@ defmodule ExOpenSea.Assets.Index do
     |> parse_response()
   end
 
-  defp parse_response({:ok, %{"assets" => assets, "next" => next, "previous" => previous}}) do
+  defp parse_response({
+         :ok,
+         %{"assets" => assets, "next" => next, "previous" => previous} = raw_payload
+       }) do
     assets
     |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.Asset))
     |> Enum.reduce(
@@ -54,27 +58,33 @@ defmodule ExOpenSea.Assets.Index do
     )
     |> case do
       {:ok, struct_assets} ->
-        asset_cursor = %ExOpenSea.AssetsCursor{assets: struct_assets, next: next, previous: previous}
-        {:ok, asset_cursor}
+        asset_cursor = %ExOpenSea.AssetsCursor{
+          assets: struct_assets,
+          next: next,
+          previous: previous
+        }
 
-      {:error, _reason} = error ->
-        error
+        {:ok, asset_cursor, raw_payload}
+
+      {:error, reason} ->
+        {:error, reason, raw_payload}
     end
   end
 
   defp parse_response({:error, response_reasons}) when is_map(response_reasons) do
-    reasons = response_reasons
-              |> Enum.reduce(
-                [],
-                fn {k, v}, acc ->
-                  acc ++ [{k, v}]
-                end
-              )
+    reasons =
+      response_reasons
+      |> Enum.reduce(
+        [],
+        fn {k, v}, acc ->
+          acc ++ [{k, v}]
+        end
+      )
 
-    {:error, reasons}
+    {:error, reasons, nil}
   end
 
-  defp parse_response({:error, _reason} = error) do
-    error
+  defp parse_response({:error, reason}) do
+    {:error, reason, nil}
   end
 end

@@ -2,6 +2,7 @@ defmodule ExOpenSea.Assets.IndexTest do
   use ExUnit.Case, async: false
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
   use WithEnv
+  alias ExOpenSea.Assets.Index
   doctest ExOpenSea.Assets.Index
 
   @api_key ExOpenSea.ApiKey.get()
@@ -19,26 +20,27 @@ defmodule ExOpenSea.Assets.IndexTest do
 
   test ".get/1" do
     use_cassette "assets/index/get_ok" do
-      assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key)
+      assert {:ok, cursor, raw_payload} = Index.get(@api_key)
       assert length(cursor.assets) != 0
       assert %ExOpenSea.Asset{} = asset = Enum.at(cursor.assets, 0)
       assert asset.name != nil
+      assert Map.get(raw_payload, "assets") != nil
     end
   end
 
   test ".get/2 can filter by collection" do
     use_cassette "assets/index/get_filter_collection_ok" do
-      assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key, %{collection: "doodles-official"})
+      assert {:ok, cursor, _} = Index.get(@api_key, %{collection: "doodles-official"})
       assert length(cursor.assets) == 20
-      assert Enum.all?(cursor.assets, & String.starts_with?(&1.name, "Doodle")) == true
+      assert Enum.all?(cursor.assets, &String.starts_with?(&1.name, "Doodle")) == true
     end
   end
 
   test ".get/2 can filter by collection_slug" do
     use_cassette "assets/index/get_filter_collection_slug_ok" do
-      assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key, %{collection_slug: "azuki"})
+      assert {:ok, cursor, _} = Index.get(@api_key, %{collection_slug: "azuki"})
       assert length(cursor.assets) == 20
-      assert Enum.all?(cursor.assets, & String.starts_with?(&1.name, "Azuki")) == true
+      assert Enum.all?(cursor.assets, &String.starts_with?(&1.name, "Azuki")) == true
     end
   end
 
@@ -47,7 +49,9 @@ defmodule ExOpenSea.Assets.IndexTest do
       token_ids = [1, 2]
       str_token_ids = token_ids |> Enum.map(&Integer.to_string/1)
 
-      assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key, %{collection_slug: "azuki", token_ids: token_ids})
+      assert {:ok, cursor, _} =
+               Index.get(@api_key, %{collection_slug: "azuki", token_ids: token_ids})
+
       assert length(cursor.assets) == 2
       assert %ExOpenSea.Asset{} = asset_1 = Enum.at(cursor.assets, 0)
       assert Enum.member?(str_token_ids, asset_1.token_id) == true
@@ -60,7 +64,7 @@ defmodule ExOpenSea.Assets.IndexTest do
     use_cassette "assets/index/get_filter_owner_ok" do
       owner = "0x5117fa741c86921b0910e889d4123ec111349fa3"
 
-      assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key, %{collection_slug: "azuki", owner: owner})
+      assert {:ok, cursor, _} = Index.get(@api_key, %{collection_slug: "azuki", owner: owner})
       assert length(cursor.assets) == 1
       assert %ExOpenSea.Asset{} = asset = Enum.at(cursor.assets, 0)
       assert asset.name == "Azuki #1094"
@@ -73,9 +77,14 @@ defmodule ExOpenSea.Assets.IndexTest do
   # - are these the correct parameters to get multiple orders from a single request?
   test ".get/2 can filter by order_direction" do
     use_cassette "assets/index/get_filter_order_direction_ok" do
-      params = %{collection_slug: "ocm-dessert", token_ids: [1], include_orders: true, order_direction: "desc"}
+      params = %{
+        collection_slug: "ocm-dessert",
+        token_ids: [1],
+        include_orders: true,
+        order_direction: "desc"
+      }
 
-      assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key, params)
+      assert {:ok, cursor, _} = Index.get(@api_key, params)
       assert length(cursor.assets) == 1
       assert %ExOpenSea.Asset{} = asset = Enum.at(cursor.assets, 0)
       assert length(asset.sell_orders) == 1
@@ -87,12 +96,19 @@ defmodule ExOpenSea.Assets.IndexTest do
 
   test ".get/2 can filter by asset_contract_address" do
     use_cassette "assets/index/get_filter_asset_contract_address_ok", match_requests_on: [:query] do
-      assert {:ok, cursor_1} = ExOpenSea.Assets.Index.get(@api_key, %{asset_contract_address: @azuki_contract_address, limit: 1})
+      assert {:ok, cursor_1, _} =
+               Index.get(@api_key, %{asset_contract_address: @azuki_contract_address, limit: 1})
+
       assert length(cursor_1.assets) == 1
       assert %ExOpenSea.Asset{} = asset_1 = Enum.at(cursor_1.assets, 0)
       assert asset_1.collection["name"] == "Azuki"
 
-      assert {:ok, cursor_2} = ExOpenSea.Assets.Index.get(@api_key, %{asset_contract_address: @doodles_contract_address, limit: 1})
+      assert {:ok, cursor_2, _} =
+               ExOpenSea.Assets.Index.get(@api_key, %{
+                 asset_contract_address: @doodles_contract_address,
+                 limit: 1
+               })
+
       assert length(cursor_2.assets) == 1
       assert %ExOpenSea.Asset{} = asset_2 = Enum.at(cursor_2.assets, 0)
       assert asset_2.collection["name"] == "Doodles"
@@ -101,7 +117,12 @@ defmodule ExOpenSea.Assets.IndexTest do
 
   test ".get/2 can filter by asset_contract_addresses" do
     use_cassette "assets/index/get_filter_asset_contract_addresses_ok" do
-      assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key, %{asset_contract_addresses: [@azuki_contract_address, @doodles_contract_address], token_ids: [1, 1]})
+      assert {:ok, cursor, _} =
+               Index.get(@api_key, %{
+                 asset_contract_addresses: [@azuki_contract_address, @doodles_contract_address],
+                 token_ids: [1, 1]
+               })
+
       assert length(cursor.assets) == 2
       assert %ExOpenSea.Asset{} = asset_1 = Enum.at(cursor.assets, 0)
       assert asset_1.collection["name"] == "Azuki"
@@ -112,7 +133,7 @@ defmodule ExOpenSea.Assets.IndexTest do
 
   test ".get/2 can filter by limit" do
     use_cassette "assets/index/get_filter_limit_ok" do
-      assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key, %{collection_slug: "azuki", limit: 1})
+      assert {:ok, cursor, _} = Index.get(@api_key, %{collection_slug: "azuki", limit: 1})
       assert length(cursor.assets) == 1
       assert %ExOpenSea.Asset{} = asset = Enum.at(cursor.assets, 0)
       assert String.starts_with?(asset.name, "Azuki") == true
@@ -121,12 +142,12 @@ defmodule ExOpenSea.Assets.IndexTest do
 
   test ".get/2 can filter by cursor" do
     use_cassette "assets/index/get_filter_cursor_ok", match_requests_on: [:query] do
-      assert {:ok, cursor_1} = ExOpenSea.Assets.Index.get(@api_key, %{limit: 1})
+      assert {:ok, cursor_1, _} = Index.get(@api_key, %{limit: 1})
       assert length(cursor_1.assets) == 1
       assert %ExOpenSea.Asset{} = asset_1 = Enum.at(cursor_1.assets, 0)
       assert asset_1.name != nil
 
-      assert {:ok, page_2} = ExOpenSea.Assets.Index.get(@api_key, %{cursor: cursor_1.next, limit: 1})
+      assert {:ok, page_2, _} = Index.get(@api_key, %{cursor: cursor_1.next, limit: 1})
       assert length(page_2.assets) == 1
       assert %ExOpenSea.Asset{} = asset_2 = Enum.at(page_2.assets, 0)
       assert asset_2.name != nil
@@ -138,7 +159,13 @@ defmodule ExOpenSea.Assets.IndexTest do
 
   test ".get/2 can filter by include_orders" do
     use_cassette "assets/index/get_filter_include_orders_ok" do
-      assert {:ok, cursor} = ExOpenSea.Assets.Index.get(@api_key, %{collection_slug: "azuki", token_ids: [1378], include_orders: true})
+      assert {:ok, cursor, _} =
+               Index.get(@api_key, %{
+                 collection_slug: "azuki",
+                 token_ids: [1378],
+                 include_orders: true
+               })
+
       assert %ExOpenSea.Asset{} = asset = Enum.at(cursor.assets, 0)
       assert length(asset.sell_orders) == 1
     end
@@ -146,7 +173,7 @@ defmodule ExOpenSea.Assets.IndexTest do
 
   test ".get/n bubbles error tuples" do
     with_env put: [ex_open_sea: [adapter: ErrorAdapter]] do
-      assert ExOpenSea.Assets.Index.get(@api_key) == {:error, :from_adapter}
+      assert Index.get(@api_key) == {:error, :from_adapter, nil}
     end
   end
 end

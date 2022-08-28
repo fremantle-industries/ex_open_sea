@@ -26,7 +26,8 @@ defmodule ExOpenSea.Events.Index do
         }
   @type events_response :: ExOpenSea.EventsResponse.t()
   @type error_reason :: :parse_result_item | String.t()
-  @type result :: {:ok, events_response} | {:error, error_reason}
+  @type raw_payload :: map
+  @type result :: {:ok, events_response, raw_payload} | {:error, error_reason, raw_payload | nil}
 
   @spec get(api_key) :: result
   @spec get(api_key, params) :: result
@@ -39,29 +40,32 @@ defmodule ExOpenSea.Events.Index do
     |> parse_response()
   end
 
-  defp parse_response({:ok, %{"asset_events" => raw_asset_events} = data}) do
-    raw_asset_events
-    |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.AssetEvent))
-    |> Enum.reduce(
-      {:ok, []},
-      fn
-        {:ok, i}, {:ok, acc} -> {:ok, [i | acc]}
-        _, _acc -> {:error, :parse_result_item}
-      end
-    )
-    |> case do
-      {:ok, asset_events} ->
-        %{data | "asset_events" => asset_events}
-        |> Mapail.map_to_struct(ExOpenSea.EventsResponse)
+  defp parse_response({:ok, %{"asset_events" => raw_asset_events} = raw_payload}) do
+    {ok_or_error, events_response_or_reason} =
+      raw_asset_events
+      |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.AssetEvent))
+      |> Enum.reduce(
+        {:ok, []},
+        fn
+          {:ok, i}, {:ok, acc} -> {:ok, [i | acc]}
+          _, _acc -> {:error, :parse_result_item}
+        end
+      )
+      |> case do
+        {:ok, asset_events} ->
+          %{raw_payload | "asset_events" => asset_events}
+          |> Mapail.map_to_struct(ExOpenSea.EventsResponse)
 
-      {:error, _} = error ->
-        error
-    end
+        {:error, _} = error ->
+          error
+      end
+
+    {ok_or_error, events_response_or_reason, raw_payload}
   end
 
-  defp parse_response({:error, response_reasons}) when is_map(response_reasons) do
+  defp parse_response({:error, raw_reasons}) when is_map(raw_reasons) do
     reasons =
-      response_reasons
+      raw_reasons
       |> Enum.reduce(
         [],
         fn {k, v}, acc ->
@@ -69,10 +73,10 @@ defmodule ExOpenSea.Events.Index do
         end
       )
 
-    {:error, reasons}
+    {:error, reasons, raw_reasons}
   end
 
-  defp parse_response({:error, _reason} = error) do
-    error
+  defp parse_response({:error, reason}) do
+    {:error, reason, nil}
   end
 end

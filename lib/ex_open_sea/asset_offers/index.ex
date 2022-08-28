@@ -11,11 +11,12 @@ defmodule ExOpenSea.AssetOffers.Index do
   @type contract_address :: String.t()
   @type token_id :: non_neg_integer
   @type params :: %{
-    optional(:limit) => String.t()
-  }
+          optional(:limit) => String.t()
+        }
   @type offer :: ExOpenSea.AssetOffer.t()
   @type error_reason :: :parse_result_item | String.t()
-  @type result :: {:ok, [offer]} | {:error, error_reason}
+  @type raw_payload :: map
+  @type result :: {:ok, [offer], raw_payload} | {:error, error_reason, raw_payload | nil}
 
   @spec get(api_key, contract_address, token_id) :: result
   @spec get(api_key, contract_address, token_id, params) :: result
@@ -28,31 +29,35 @@ defmodule ExOpenSea.AssetOffers.Index do
     |> parse_response()
   end
 
-  defp parse_response({:ok, %{"offers" => offers}}) do
-    offers
-    |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.AssetOffer))
-    |> Enum.reduce(
-      {:ok, []},
-      fn
-        {:ok, i}, {:ok, acc} -> {:ok, [i | acc]}
-        _, _acc -> {:error, :parse_result_item}
-      end
-    )
+  defp parse_response({:ok, %{"offers" => raw_offers} = raw_payload}) do
+    {ok_or_error, offers_or_reason} =
+      raw_offers
+      |> Enum.map(&Mapail.map_to_struct(&1, ExOpenSea.AssetOffer))
+      |> Enum.reduce(
+        {:ok, []},
+        fn
+          {:ok, i}, {:ok, acc} -> {:ok, [i | acc]}
+          _, _acc -> {:error, :parse_result_item}
+        end
+      )
+
+    {ok_or_error, offers_or_reason, raw_payload}
   end
 
-  defp parse_response({:error, response_reasons}) when is_map(response_reasons) do
-    reasons = response_reasons
-              |> Enum.reduce(
-                [],
-                fn {k, v}, acc ->
-                  acc ++ [{k, v}]
-                end
-              )
+  defp parse_response({:error, raw_reasons}) when is_map(raw_reasons) do
+    reasons =
+      raw_reasons
+      |> Enum.reduce(
+        [],
+        fn {k, v}, acc ->
+          acc ++ [{k, v}]
+        end
+      )
 
-    {:error, reasons}
+    {:error, reasons, raw_reasons}
   end
 
-  defp parse_response({:error, _reason} = error) do
-    error
+  defp parse_response({:error, reason}) do
+    {:error, reason, nil}
   end
 end
